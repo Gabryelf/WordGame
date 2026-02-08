@@ -205,3 +205,267 @@ body {
 **Редактируем если надо**
 
 **Проверяем работоспособность стилевых событий**
+
+</details>
+
+<details> <summary><strong>⚙️ Часть 3: Настройка конфигурации</strong></summary>
+
+- [ ] Шаг 3.1: Создание глобальных настроек для приложения config.js
+
+````javascript
+// Конфигурация игры
+const CONFIG = {
+    // Настройки игры
+    INITIAL_LEVEL: 1,
+    INITIAL_SCORE: 0,
+    INITIAL_ATTEMPTS: 5,
+    MAX_LEVEL: 50,
+    
+    // Настройки генерации уровней
+    MIN_WORDS_PER_LEVEL: 3,
+    MAX_WORDS_PER_LEVEL: 5,
+    MAX_LETTERS_IN_CIRCLE: 8,
+    CIRCLE_RADIUS: 75,
+    CIRCLE_CENTER_X: 110,
+    CIRCLE_CENTER_Y: 110,
+    
+    // Настройки очков
+    POINTS_PER_LETTER: 10,
+    BONUS_PER_LEVEL: 100,
+    
+    // Настройки сложности
+    LEVEL_MULTIPLIER: 0.1,
+    ATTEMPTS_PER_LEVEL: 1,
+    
+    // Настройки интерфейса
+    LETTER_CELL_SIZE: 40,
+    INPUT_LETTER_SIZE: 45,
+    CIRCLE_LETTER_SIZE: 45
+};
+````
+
+- [ ] Шаг 3.2: Создание конструктора приложения game.js главного файла
+
+````javascript
+// Основная логика игры
+class Game {
+    constructor() {
+        this.state = {
+            mode: 'infinite',
+            level: CONFIG.INITIAL_LEVEL,
+            score: CONFIG.INITIAL_SCORE,
+            attempts: CONFIG.INITIAL_ATTEMPTS,
+            currentInput: [],
+            foundWords: [],
+            levelData: null,
+            dailyCompleted: false,
+            dailyDate: null
+        };
+        
+        this.init();
+    }
+
+    init() {
+        console.log('Игра инициализирована');
+    }
+}
+
+// Создание экземпляра игры
+const game = new Game();
+````
+
+- [ ] Шаг 3.2: Создание функций в  game.js для последующей реализации
+
+````javascript
+// В классе игры Game
+...
+    // Настройка ежедневной игры
+    setupDaily() {
+        console.log('Настройка ежедневной игры');
+    }
+
+    // Настройка обработчиков событий
+    setupEventListeners() {
+        console.log('Настройка обработчиков событий');
+    }
+
+    // Начать игру
+    start(mode) {
+        console.log('Начать игру');
+    }
+
+    // Генерация обычного уровня
+    generateLevel() {
+         console.log('Генерация обычного уровня');
+    }
+
+    // Генерация ежедневного уровня
+    generateDailyLevel() {
+         console.log('Генерация ежедневного уровня');
+    }
+
+    // Добавить букву
+    addLetter(letter) {
+        console.log('Добавить букву');
+    }
+
+    // Удалить последнюю букву
+    removeLastLetter() {
+        console.log('Удалить последнюю букву');
+    }
+
+    // Сбросить ввод
+    resetInput() {
+        console.log('Сбросить ввод');
+    }
+
+    // Отправить слово
+    submitWord() {
+       console.log('Отправить слово');
+    }
+
+    // Уровень завершен
+    levelComplete() {
+        console.log('Уровень завершен');
+    }
+
+    // Уровень провален
+    levelFailed() {
+        console.log('Уровень провален');
+    }
+
+    // Следующий уровень
+    nextLevel() {
+       console.log('Следующий уровень');
+    }
+````
+
+- [ ] Шаг 3.3: Заполнение функций инициализации в game.js для проверки вызовов
+
+````javascript
+// В функциях Game класса
+...
+
+     init() {
+        this.setupDaily();
+        this.setupEventListeners();
+        console.log('Игра инициализирована');
+    }
+
+    // Начать игру
+    start(mode) {
+        this.state.mode = mode;
+        this.state.currentInput = [];
+        this.state.foundWords = [];
+        this.state.attempts = CONFIG.INITIAL_ATTEMPTS + Math.floor(this.state.level / 3);
+        
+        // Генерация уровня
+        if (mode === 'infinite') {
+            this.generateLevel();
+        } else {
+            this.generateDailyLevel();
+            this.state.dailyCompleted = true;
+        }
+        console.log('Начать игру');
+    }
+
+
+````
+
+- [ ] Шаг 3.4: Тестируем вызов функций в браузере в консоли разработчика
+
+
+</details>
+
+<details> <summary><strong>🔧 Часть 4: Настройка вспомогательных функций</strong></summary>
+
+- [ ] Шаг 4.1: Создаем набор требуемых утилит в файле utils.js
+
+````javascript
+const Utils = {
+    // Перемешивание массива
+    shuffle(array) {
+        const newArray = [...array];
+        ...
+        return newArray;
+    },
+
+    // Уникальные значения
+    unique(array) {
+        return [...new Set(array)];
+    },
+
+    // Получить случайный элемент
+    randomElement(array) {
+        return array[Math.floor(Math.random() * array.length)];
+    },
+
+    // Подсчет повторений букв в слове
+    countLetters(word) {
+        ...
+        return counts;
+    },
+
+    // Проверка, можно ли составить слово из букв
+    canFormWord(word, availableLetters) {
+        const wordCounts = this.countLetters(word);
+        const availableCounts = this.countLetters(availableLetters);
+        ...
+        return true;
+    },
+
+    // Получить дату в формате YYYY-MM-DD
+    getTodayString() {
+        const today = new Date();
+        return today.toISOString().split('T')[0];
+    },
+    
+    // Получить индекс темы дня
+    getDailyThemeIndex() {
+        const today = new Date();
+        return today.getDate() % WORD_LIST.dailyThemes.length;
+    }
+};
+````
+
+- [ ] Шаг 4.2: Дополняем реализацию функций расчета утилит в файле utils.js
+
+````javascript
+const Utils = {
+    // Перемешивание массива
+    shuffle(array) {
+        const newArray = [...array];
+        // Мешаем меняя местами
+        for (let i = newArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+        }
+        return newArray;
+    },
+
+    // Подсчет повторений букв в слове
+    countLetters(word) {
+        // Итеративный подсчет повторений
+        for (const letter of word) {
+            counts[letter] = (counts[letter] || 0) + 1;
+        }
+        return counts;
+    },
+
+    // Проверка, можно ли составить слово из букв
+    canFormWord(word, availableLetters) {
+        const wordCounts = this.countLetters(word);
+        const availableCounts = this.countLetters(availableLetters);
+        // Цикл для возврата негативного результата - слово нельзя составить
+        for (const letter in wordCounts) {
+            if (!availableCounts[letter] || availableCounts[letter] < wordCounts[letter]) {
+                return false;
+            }
+        }
+        // Возвращаем положительный результат если не зашли в цикл
+        return true;
+    },
+};
+````
+
+</details>
