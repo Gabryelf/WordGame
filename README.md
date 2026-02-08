@@ -470,9 +470,9 @@ const Utils = {
 
 </details>
 
-<details> <summary><strong>🔧 Часть 5: Разработка представлений</strong></summary>
+<details> <summary><strong>🏟️ Часть 5: Разработка представлений</strong></summary>
   
-- [ ] Шаг 4.2: Инициализация интерфейса и его функций в ui.js
+- [ ] Шаг 5.1: Инициализация интерфейса и его функций в ui.js
 
 ````javascript
 // Управление интерфейсом
@@ -521,7 +521,7 @@ const UI = {
 };
 ````
 
-- [ ] Шаг 4.2: Инициализация интерфейса и его функций в ui.js для экранов
+- [ ] Шаг 5.2: Инициализация интерфейса и его функций в ui.js для экранов
 
 ````javascript
 // UI класс
@@ -557,7 +557,7 @@ const UI = {
         this.renderCircleInput(state);
 ````
 
-- [ ] Шаг 4.3: Возвращаемся в game.js и вызываем наши новые функции
+- [ ] Шаг 5.3: Возвращаемся в game.js и вызываем наши новые функции
 
 ````javascript
 // Настройка обработчиков событий
@@ -604,12 +604,221 @@ const UI = {
     }
 ````
 
-- [ ] Шаг 4.4: Тестируем в браузере запуск режимов в консоле
+- [ ] Шаг 5.4: Тестируем в браузере запуск режимов в консоле
       
 **Смотрим текстовый вызов**
 
 **Проверяем на наличие ошибок**
 
 **Исправляем если надо**
+
+</details>
+
+<details> <summary><strong> Часть 6: Стилизация экранов </strong></summary>
+  
+- [ ] Шаг 6.1: Дополняем main.css новыми стилями
+
+````css
+/* выравнивание контейнеров */
+#mainScreen {
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    gap: 40px;
+}
+
+#gameScreen {
+    padding: 10px;
+}
+
+#resultScreen {
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+    gap: 20px;
+}
+
+/* стилизация логотипа названия */
+.logo {
+    text-align: center;
+}
+
+.logo h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    background: linear-gradient(45deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.logo p {
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+.mode-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 300px;
+}
+
+/* плавное появление - скрытие */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); display: none; }
+}
+````
+
+- [ ] Шаг 6.2: Работа с экранами в game.js - вызов и отрисовка
+
+````javascript
+start(mode) {
+    ...
+        // Вызываем события и показ экрана
+        UI.showScreen('gameScreen');
+        UI.updateGameScreen(this.state);
+    }
+````
+**Тестируем переключение**
+
+**Ожидается смена экрана**
+
+**Кнопка назад должна так же работать**
+
+- [ ] Шаг 6.3: Добавляем стили для игрового экрана
+      
+````css
+.subtitle {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-top: 5px;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.icon-btn:active {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Игровой экран */
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 10px;
+}
+
+.stats {
+    display: flex;
+    gap: 15px;
+}
+
+.stat {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 1.1rem;
+}
+
+.words-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.words-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.word-row {
+    display: flex;
+    gap: 5px;
+}
+
+.letter-cell {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #4b5563;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.letter-cell.revealed {
+    background: linear-gradient(45deg, #059669, #10b981);
+    border-color: #059669;
+    transform: scale(1.05);
+}
+
+.word-info {
+    text-align: center;
+    font-size: 1rem;
+    opacity: 0.9;
+    margin-top: 10px;
+}
+````
+
+- [ ] Шаг 6.4: Добавляем новые шрифты
+
+````text
+https://fonts.google.com/
+````
+
+**Переходим на сайт**
+
+**Выставляем поиск кирилических шрифтов**
+
+**Находим поравившийся**
+
+**Получаем шрифт и импортируе в проект**
+
+````html
+/* Пример вставки ссылки в html*/
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Rampart+One&display=swap');
+</style>
+````
+
+````css
+/* добавляем на ряду с остальными стилями любого контейнера */
+#mainScreen {
+    ...
+    font-family: "Rampart One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+````
+
+**По аналогии изменяем и остальные шрифты**
+
+**Стилизуем так же кнопки как и название только другим шрифтом**
+
 
 </details>
