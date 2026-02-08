@@ -945,3 +945,141 @@ const WORD_LIST = {
 ````
 
 </details>
+
+
+<details> <summary><strong>🔄 Часть 8: Работа с системой ввода игрока </strong></summary>
+  
+- [ ] Шаг 8.1: Заполняем метод отрисовки поля ввода в ui.js
+
+**Отрисовываем буквы-кнопки**
+**Добавляем кнопку ввода полного набора букв**
+**Распологаем буквы по кругу**
+
+````javascript
+   // Отрисовать круг с буквами
+    renderCircleInput(state) {
+        const container = document.getElementById('circleInput');
+        container.innerHTML = '';
+        
+        // Центральная кнопка
+        const center = document.createElement('div');
+        center.className = 'circle-center';
+        center.textContent = '✓';
+        center.title = 'Проверить слово';
+        container.appendChild(center);
+        
+        // Буквы по кругу
+        const letters = state.levelData.letters;
+        const radius = CONFIG.CIRCLE_RADIUS;
+        const centerX = CONFIG.CIRCLE_CENTER_X;
+        const centerY = CONFIG.CIRCLE_CENTER_Y;
+        
+        letters.forEach((letter, index) => {
+            const angle = (index / letters.length) * 2 * Math.PI;
+            const x = centerX + radius * Math.cos(angle);
+            const y = centerY + radius * Math.sin(angle);
+            
+            const btn = document.createElement('div');
+            btn.className = 'circle-letter';
+            btn.textContent = letter;
+            btn.style.left = `${x - CONFIG.CIRCLE_LETTER_SIZE / 2}px`;
+            btn.style.top = `${y - CONFIG.CIRCLE_LETTER_SIZE / 2}px`;
+            btn.title = `Добавить букву ${letter}`;
+            
+            container.appendChild(btn);
+        });
+    },
+````
+
+- [ ] Шаг 8.2: Заполняем метод отрисовки поля ввода
+
+**Размещение и стилизация компонентов ввода**
+
+````javascript
+   // Генерация обычного уровня
+    generateLevel() {
+        ...
+        
+        // Собираем все буквы
+        const allLetters = selectedWords.join('').split('');
+        
+        // Берем уникальные буквы для круга
+        let circleLetters = Utils.unique(allLetters);
+        if (circleLetters.length > CONFIG.MAX_LETTERS_IN_CIRCLE) {
+            // Выбираем самые частые буквы
+            const letterCounts = Utils.countLetters(allLetters);
+            circleLetters = Object.keys(letterCounts)
+                .sort((a, b) => letterCounts[b] - letterCounts[a])
+                .slice(0, CONFIG.MAX_LETTERS_IN_CIRCLE);
+        }
+        
+        // Перемешиваем буквы
+        circleLetters = Utils.shuffle(circleLetters);
+        
+        this.state.levelData = {
+            ...
+            letters: circleLetters,
+            allLetters: allLetters
+        };
+    }
+````
+
+- [ ] Шаг 8.3: Возвращаемся в components.css и реализуем стили ввода
+
+````css
+/* Ввод */
+.input-area {
+    padding: 20px 0;
+}
+
+.circle-input {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    margin: 0 auto;
+}
+
+.circle-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+}
+
+.circle-center:active {
+    transform: translate(-50%, -50%) scale(0.95);
+}
+
+.circle-letter {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(45deg, #374151, #4b5563);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s;
+}
+
+.circle-letter:active {
+    transform: scale(0.9);
+    background: #4b5563;
+}
+````
+
+</details>
