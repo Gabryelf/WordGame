@@ -614,7 +614,7 @@ const UI = {
 
 </details>
 
-<details> <summary><strong> Часть 6: Стилизация экранов </strong></summary>
+<details> <summary><strong>🌟 Часть 6: Стилизация экранов </strong></summary>
   
 - [ ] Шаг 6.1: Дополняем main.css новыми стилями
 
@@ -820,5 +820,128 @@ https://fonts.google.com/
 
 **Стилизуем так же кнопки как и название только другим шрифтом**
 
+
+</details>
+
+
+<details> <summary><strong>🎇 Часть 7: Встраивание игрового функционала </strong></summary>
+  
+- [ ] Шаг 7.1: Генерация уровня обычной игры game.js
+
+**Тестируем в консоле разработчика**
+**Добавляем в game.js проверку на наличие состояния если есть ошибка**
+
+````javascript
+   // Обновить игровой экран
+   updateGameScreen(state) {
+        if (!state.levelData) return;
+        ...
+    },
+````
+
+**Организуем систему данных - уровень и сложность**
+
+````javascpt
+// Генерация обычного уровня
+    generateLevel() {
+        const levelMultiplier = 1 + (this.state.level - 1) * CONFIG.LEVEL_MULTIPLIER;
+        const wordCount = Math.min(
+            CONFIG.MIN_WORDS_PER_LEVEL + Math.floor(this.state.level / 2),
+            CONFIG.MAX_WORDS_PER_LEVEL
+        );
+        
+        ...
+    }
+````
+
+**Подбираем слова из конфига в соответствии со сложностью**
+
+````javascpt
+// Генерация обычного уровня
+    generateLevel() {
+
+        ...
+
+        // Выбираем слова
+        const selectedWords = [];
+        const usedWords = new Set();
+        
+        for (let i = 0; i < wordCount; i++) {
+            let word;
+            do {
+                word = Utils.randomElement(WORD_LIST.common);
+            } while (usedWords.has(word) || word.length < 3);
+            
+            selectedWords.push(word);
+            usedWords.add(word);
+        }
+        
+        this.state.levelData = {
+            words: selectedWords,
+        };
+    }
+````
+
+- [ ] Шаг 7.2: Добавляем метод для отрисовки слов на экране игры в ui.js
+
+````javascript
+// Отрисовать сетку слов
+    renderWordsGrid(state) {
+        const container = document.getElementById('wordsGrid');
+        container.innerHTML = '';
+        container.className = 'words-grid';
+        // Создаем контейнер для каждого слова
+        state.levelData.words.forEach(word => {
+            const row = document.createElement('div');
+            row.className = 'word-row';
+            // Добавляем буквы в контейнер слова
+            word.split('').forEach((letter, index) => {
+                const cell = document.createElement('div');
+                cell.className = 'letter-cell';
+                
+                if (state.foundWords.includes(word)) {
+                    cell.textContent = letter;
+                    cell.classList.add('revealed');
+                }
+                
+                row.appendChild(cell);
+            });
+            
+            container.appendChild(row);
+        });
+    },
+````
+
+- [ ] Шаг 7.3: Создаем базу из слов в виде словаря в words.js
+
+````javascript
+// Основной словарь слов
+const WORD_LIST = {
+    // Общие слова
+    common: [
+        'КОТ', 'ДОМ', 'МАК', 'РОТ', 'ЛЕС', 'СОН', 'НОС', 'РАК', 'КОЗА', 'ЛИСА',
+        'МОРЕ', 'РЕКА', 'ПОЛЕ', 'ГОРА', 'РУКА', 'НОГА', 'ГЛАЗ', 'УХО', 'РОТ', 'НОС',
+        'ВОДА', 'ОГОНЬ', 'ВЕТЕР', 'СОЛНЦЕ', 'ЛУНА', 'ЗВЕЗДА', 'ПТИЦА', 'РЫБА', 'ЦВЕТОК', 'ДЕРЕВО',
+        'СТОЛ', 'СТУЛ', 'ДВЕРЬ', 'ОКНО', 'КНИГА', 'РУЧКА', 'БУМАГА', 'ЧАСЫ', 'ТЕЛЕФОН', 'КОМПЬЮТЕР',
+        'МАШИНА', 'ПОЕЗД', 'САМОЛЕТ', 'ВЕЛОСИПЕД', 'ТЕЛЕВИЗОР', 'РАДИО', 'МУЗЫКА', 'ФИЛЬМ', 'ИГРА', 'ШКОЛА'
+    ],
+    
+    // Русский алфавит
+    alphabet: 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'
+};
+````
+
+- [ ] Шаг 7.4: Тестирование этапа
+
+**Загружаем игру и выбираем обычный режим**
+**Если видим ошибку и нет отображения букв добавляем строку с проверкой ниже в game.js**
+
+````javascript
+   // Обновить игровой экран
+   updateGameScreen(state) {
+        if (!state.levelData) return;
+        ...
+    },
+````
 
 </details>
