@@ -1,5 +1,6 @@
 <details> <summary><strong>📁 Часть 1: Подготовка проекта</strong></summary>
-##Шаг 1.1: Изучаем структуру
+  
+- [ ] Шаг 1.1: Изучаем структуру
   
 ````text
 word-wonders/
@@ -16,7 +17,7 @@ word-wonders/
     └── words.js           # Словарь слов и данные
 ````
 
-##Шаг 1.2: Создание основной структуры в index.html
+- [ ] Шаг 1.2: Создание основной структуры в index.html
   
 ````html
 <!DOCTYPE html>
@@ -42,7 +43,7 @@ word-wonders/
 </body>
 </html>
 ````
-##Шаг 1.3: Подключение ссылок на остальные скрипты в index.html
+- [ ] Шаг 1.3: Подключение ссылок на остальные скрипты в index.html
 
 ````html
 <!-- Сначала стили -->
@@ -57,9 +58,9 @@ word-wonders/
 <script src="js/ui.js"></script>       <!-- 5. Интерфейс -->
 ````
 
-##Шаг 1.4: Наполняем index.html содержимым контейнеров
+- [ ] Шаг 1.4: Наполняем index.html содержимым контейнеров
 
-### Главное меню - стартовый экран
+**Главное меню - стартовый экран**
 ````html
 <!-- Главное меню -->
     <div id="mainScreen" class="screen active">
@@ -83,7 +84,7 @@ word-wonders/
     </div>
 ````
 
-### Игровой контейнер
+**Игровой контейнер**
 ````html
 <!-- Игровой экран -->
     <div id="gameScreen" class="screen">
@@ -110,7 +111,7 @@ word-wonders/
     </div>
 ````
 
-### Событийный контейнер сообщений
+**Событийный контейнер сообщений**
 ````html
 <!-- Экран результатов -->
     <div id="resultScreen" class="screen">
@@ -130,4 +131,77 @@ word-wonders/
         </div>
     </div>
 ````
-##Шаг 1.5: Проверяем результат в браузере с запуском index.html
+- [ ] Шаг 1.5: Проверяем результат в браузере с запуском index.html
+</details>
+
+<details> <summary><strong>🎨 Часть 2: Создание базовых стилей</strong></summary>
+
+- [ ] Шаг 2.1: Открываем и заполняем файл main.css основными стилями
+````css
+/* Основные стили */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #2d4263 100%);
+    color: #f8fafc;
+    height: 100vh;
+    overflow: hidden;
+    touch-action: manipulation;
+}
+
+/* Стили экранов */
+.screen {
+    display: none;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+}
+
+.screen.active {
+    display: flex;
+}
+````
+
+- [ ] Шаг 2.2: Открываем файл components.css и заполняем стилями для элементов
+
+````css
+/* Задайте свои стили для главных кнопок*/
+.mode-btn {
+    ...
+}
+
+.mode-btn:first-child {
+    animation-delay: 0.1s;
+}
+
+.mode-btn:last-child {
+    animation-delay: 0.2s;
+}
+
+.mode-btn:active {
+    transform: scale(0.98);
+}
+
+.mode-btn:hover {
+    background-color: #6f18c0;
+}
+/* Остальные кнопки потом зададим ниже*/
+````
+
+- [ ] Шаг 2.3: Проверка и отладка стилей - запускаем index.html в браузере
+
+**Смотрим на результат стилизации**
+
+**Редактируем если надо**
+
+**Проверяем работоспособность стилевых событий**
