@@ -1083,3 +1083,177 @@ const WORD_LIST = {
 ````
 
 </details>
+
+<details> <summary><strong>📲 Часть 9: Формируем логику ввода </strong></summary>
+  
+- [ ] Шаг 9.1: Готовим реализацию для ввода букв в game.js
+
+**Метод для добавления буквы в массив ввода**
+
+````javascript
+// Добавить букву
+    addLetter(letter) {
+        if (this.state.currentInput.length < 15) {
+            this.state.currentInput.push(letter);
+            UI.updateGameScreen(this.state);
+        }
+    }
+````
+
+**Метод для удаления буквы из массива ввода**
+
+````javascript
+// Удалить последнюю букву
+    removeLastLetter() {
+        if (this.state.currentInput.length > 0) {
+            this.state.currentInput.pop();
+            UI.updateGameScreen(this.state);
+        }
+    }
+````
+
+**Метод для удаления всех букв из массива ввода**
+
+````javascript
+    // Сбросить ввод
+    resetInput() {
+        this.state.currentInput = [];
+        UI.updateGameScreen(this.state);
+    }
+````
+
+- [ ] Шаг 9.2: Реализуем систему отправки массива на обработку в game.js
+
+````javascript
+   // Отправить слово
+    submitWord() {
+        const word = this.state.currentInput.join('').toUpperCase();
+        
+        if (this.state.levelData.words.includes(word)) {
+            if (!this.state.foundWords.includes(word)) {
+                // Слово найдено
+                this.state.foundWords.push(word);
+                const points = word.length * CONFIG.POINTS_PER_LETTER;
+                this.state.score += points;
+                
+                consol.log(`+${points} очков!`, '✨');
+                
+                // Проверка завершения уровня
+                if (this.state.foundWords.length === this.state.levelData.words.length) {
+                    setTimeout(() => this.levelComplete(), 500);
+                }
+            } else {
+                consol.log("Неправильное слово!");
+            }
+        } else {
+            // Неправильное слово
+            this.state.attempts--;
+            consol.log('Нет такого слова', '❌');
+            
+            if (this.state.attempts <= 0) {
+                setTimeout(() => this.levelFailed(), 500);
+            }
+        }
+        
+        this.resetInput();
+        UI.updateGameScreen(this.state);
+    }
+````
+
+- [ ] Шаг 9.3: Создаем отображение вводимых символов
+
+````javascript
+// Отрисовать текущий ввод
+    renderCurrentInput(state) {
+        const container = document.getElementById('currentInput');
+        container.innerHTML = '';
+        
+        state.currentInput.forEach(letter => {
+            const div = document.createElement('div');
+            div.className = 'input-letter';
+            div.textContent = letter;
+            container.appendChild(div);
+        });
+    },
+````
+
+**Тестируем в браузере отображение массива и состовление слов**
+
+</details>
+
+<details> <summary><strong>🎲 Часть 10: Введение системы сообщений </strong></summary>
+  
+- [ ] Шаг 10.1: Готовим стилистическую основу в components.css
+
+````css
+/* Всплывающие сообщения */
+.floating-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    z-index: 1000;
+    animation: fadeOut 2s forwards;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+````
+
+- [ ] Шаг 10.2: Формируем отображение в ui.js
+
+````javascript
+// Показать всплывающее сообщение
+    showMessage(text, icon = '') {
+        const message = document.createElement('div');
+        message.className = 'floating-message';
+        message.innerHTML = icon ? `${icon} ${text}` : text;
+        
+        document.body.appendChild(message);
+        
+        setTimeout(() => {
+            if (message.parentNode) {
+                message.parentNode.removeChild(message);
+            }
+        }, 1500);
+    }
+````
+
+- [ ] Шаг 10.3: Заполняем пробелы в game.js для показа по событию
+
+````javascript
+// Отправить слово
+    submitWord() {
+        ...
+        if (this.state.levelData.words.includes(word)) {
+            if (!this.state.foundWords.includes(word)) {
+                ...
+                // вместо console.log
+                UI.showMessage(`+${points} очков!`, '✨');
+                
+                ...
+            } else {
+                // вместо console.log
+                UI.showMessage('Уже найдено!', 'ℹ️');
+            }
+        } else {
+            ...
+            // вместо console.log
+            UI.showMessage('Нет такого слова', '❌');
+            
+            ...
+        }
+        
+        ...
+    }
+````
+
+**Тестируем в браузере отображение подсказок**
+
+**Сообщения должны появляться поцентру с анимациями**
+
+</details>
