@@ -469,3 +469,147 @@ const Utils = {
 ````
 
 </details>
+
+<details> <summary><strong>🔧 Часть 5: Разработка представлений</strong></summary>
+  
+- [ ] Шаг 4.2: Инициализация интерфейса и его функций в ui.js
+
+````javascript
+// Управление интерфейсом
+const UI = {
+    currentScreen: 'mainScreen',
+    
+    // Показать экран
+    showScreen(screenId) {
+         console.log('Показать экран');
+    },
+    
+    // Обновить игровой экран
+    updateGameScreen(state) {
+        console.log('Обновить игровой экран');
+    },
+    
+    // Отрисовать сетку слов
+    renderWordsGrid(state) {
+        console.log('Отрисовать сетку слов');
+    },
+    
+    // Отрисовать текущий ввод
+    renderCurrentInput(state) {
+         console.log('Отрисовать текущий ввод');
+    },
+    
+    // Отрисовать круг с буквами
+    renderCircleInput(state) {
+         console.log('Отрисовать круг с буквами');
+    },
+    
+    // Показать уровень завершен
+    showLevelComplete(state) {
+         console.log('Показать уровень завершен');
+    },
+    
+    // Показать уровень провален
+    showLevelFailed(state) {
+          console.log('Показать уровень провален');
+    },
+    
+    // Показать всплывающее сообщение
+    showMessage(text, icon = '') {
+         console.log('Показать всплывающее сообщение');
+    }
+};
+````
+
+- [ ] Шаг 4.2: Инициализация интерфейса и его функций в ui.js для экранов
+
+````javascript
+// UI класс
+// Показать экран
+    showScreen(screenId) {
+        this.currentScreen = screenId;
+        // Показать выбранный экран и его элементы
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        // Присваиваем класс стилей для отображения
+        document.getElementById(screenId).classList.add('active');
+    },
+
+ if (!state.levelData) return;
+        
+        // Обновить статистику
+        document.getElementById('currentLevel').textContent = state.level;
+        document.getElementById('score').textContent = state.score;
+        document.getElementById('attempts').textContent = state.attempts;
+        
+        // Обновить информацию
+        const foundCount = state.foundWords.length;
+        const totalWords = state.levelData.words.length;
+        document.getElementById('wordInfo').textContent = 
+            `Найдено слов: ${foundCount}/${totalWords}`;
+        
+        // Отрисовать слова
+        this.renderWordsGrid(state);
+        
+        // Отрисовать текущий ввод
+        this.renderCurrentInput(state);
+        
+        // Отрисовать круг с буквами
+        this.renderCircleInput(state);
+````
+
+- [ ] Шаг 4.3: Возвращаемся в game.js и вызываем наши новые функции
+
+````javascript
+// Настройка обработчиков событий
+    setupEventListeners() {
+        // Главный экран
+        document.getElementById('infiniteMode').addEventListener('click', () => this.start('infinite'));
+        document.getElementById('dailyMode').addEventListener('click', () => {
+            if (!this.state.dailyCompleted) {
+                this.start('daily');
+            }
+        });
+        
+        // Игровой экран
+        document.getElementById('backBtn').addEventListener('click', () => UI.showScreen('mainScreen'));
+        document.getElementById('resetBtn').addEventListener('click', () => this.resetInput());
+        
+        // Круг с буквами
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.circle-letter')) {
+                this.addLetter(e.target.textContent);
+            }
+            if (e.target.closest('.circle-center')) {
+                this.submitWord();
+            }
+        });
+        
+        // Экран результатов
+        document.getElementById('nextLevelBtn').addEventListener('click', () => this.nextLevel());
+        document.getElementById('backToMenuBtn').addEventListener('click', () => {
+            UI.showScreen('mainScreen');
+        });
+        
+        // Клавиатура
+        document.addEventListener('keydown', (e) => {
+            if (UI.currentScreen === 'gameScreen') {
+                if (e.key === 'Enter') this.submitWord();
+                if (e.key === 'Backspace') this.removeLastLetter();
+                if (/^[а-яА-Яa-zA-Z]$/.test(e.key)) {
+                    this.addLetter(e.key.toUpperCase());
+                }
+                UI.updateGameScreen(this.state);
+            }
+        });
+    }
+````
+
+- [ ] Шаг 4.4: Тестируем в браузере запуск режимов в консоле
+      
+**Смотрим текстовый вызов**
+
+**Проверяем на наличие ошибок**
+
+**Исправляем если надо**
+
+</details>
