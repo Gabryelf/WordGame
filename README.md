@@ -1442,140 +1442,22 @@ const WORD_LIST = {
 
 ````javascript
 // ==============================
-// АНИМАЦИИ И ЭФФЕКТЫ
+// МЕНЕДЖЕР АНИМАЦИЙ
 // ==============================
 
 class AnimationManager {
     constructor() {
-        this.animations = new Map();
-    }
-    
-    // Эффект вспышки
-    createFlashEffect(element, color) {
-        const flash = document.createElement('div');
-        flash.style.position = 'absolute';
-        flash.style.top = '0';
-        flash.style.left = '0';
-        flash.style.width = '100%';
-        flash.style.height = '100%';
-        flash.style.background = color;
-        flash.style.opacity = '0.5';
-        flash.style.borderRadius = 'inherit';
-        flash.style.zIndex = '1';
-        flash.style.pointerEvents = 'none';
-        
-        element.appendChild(flash);
-        
-        // Анимация исчезновения
-        let opacity = 0.5;
-        const fadeOut = () => {
-            opacity -= 0.05;
-            flash.style.opacity = opacity;
-            
-            if (opacity > 0) {
-                requestAnimationFrame(fadeOut);
-            } else {
-                flash.remove();
-            }
-        };
-        
-        requestAnimationFrame(fadeOut);
-    }
-    
-    // Анимация HP бара
-    animateHPBar(hpBar, newPercent) {
-        if (!hpBar) return;
-        
-        const currentPercent = parseFloat(hpBar.style.width) || 100;
-        const diff = newPercent - currentPercent;
-        const duration = 300;
-        const steps = duration / 16;
-        const step = diff / steps;
-        let currentStep = 0;
-        
-        const animate = () => {
-            if (currentStep < steps) {
-                const newValue = currentPercent + step * currentStep;
-                hpBar.style.width = `${newValue}%`;
-                currentStep++;
-                requestAnimationFrame(animate);
-            }
-        };
-        
-        animate();
-    }
-    
-    // Эффект дрожания элемента
-    shakeElement(element, intensity = 10) {
-        if (!element) return;
-        
-        const originalTransform = element.style.transform;
-        let shakeCount = 0;
-        const maxShakes = 5;
-        
-        const shake = () => {
-            if (shakeCount >= maxShakes) {
-                element.style.transform = originalTransform;
-                return;
-            }
-            
-            const x = (Math.random() - 0.5) * intensity * 2;
-            const y = (Math.random() - 0.5) * intensity * 2;
-            
-            element.style.transform = `${originalTransform} translate(${x}px, ${y}px)`;
-            
-            shakeCount++;
-            setTimeout(shake, 50);
-        };
-        
-        shake();
-    }
-    
-    // Эффект завершения уровня
-    createLevelUpEffect() {
-        const effect = document.createElement('div');
-        effect.className = 'level-up-effect';
-        effect.innerHTML = `
-            <div class="stars">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-            </div>
-        `;
-        effect.style.position = 'fixed';
-        effect.style.top = '50%';
-        effect.style.left = '50%';
-        effect.style.transform = 'translate(-50%, -50%)';
-        effect.style.background = 'rgba(0, 0, 0, 0.8)';
-        effect.style.color = 'white';
-        effect.style.padding = '20px 40px';
-        effect.style.borderRadius = '20px';
-        effect.style.zIndex = '10000';
-        effect.style.textAlign = 'center';
-        
-        document.body.appendChild(effect);
-        
-        // Анимация звезд
-        const stars = effect.querySelectorAll('.fa-star');
-        stars.forEach((star, index) => {
-            star.style.animation = `bounce 0.5s ease ${index * 0.2}s infinite alternate`;
-        });
-        
-        // Удаляем через 2 секунды
-        setTimeout(() => {
-            effect.style.transition = 'opacity 0.5s';
-            effect.style.opacity = '0';
-            setTimeout(() => effect.remove(), 500);
-        }, 2000);
+        this.initCSSAnimations();
     }
     
     // Инициализация CSS анимаций
     initCSSAnimations() {
         const style = document.createElement('style');
         style.textContent = `
-            @keyframes bounce {
-                from { transform: scale(1); }
-                to { transform: scale(1.3); }
+            /* Основные анимации */
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
             }
             
             @keyframes pulse {
@@ -1584,47 +1466,385 @@ class AnimationManager {
                 100% { transform: scale(1); }
             }
             
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+            
+            @keyframes bounce {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-10px); }
+            }
+            
             @keyframes spin {
                 from { transform: rotate(0deg); }
                 to { transform: rotate(360deg); }
             }
             
-            .pulse {
-                animation: pulse 0.5s ease;
+            @keyframes colorChange {
+                0% { background-color: #ef4444; }
+                25% { background-color: #f59e0b; }
+                50% { background-color: #10b981; }
+                75% { background-color: #3b82f6; }
+                100% { background-color: #8b5cf6; }
             }
             
-            .spin {
-                animation: spin 1s linear;
+            /* Классы анимаций */
+            .fade-in { animation: fadeIn 0.5s ease forwards; }
+            .pulse { animation: pulse 0.5s ease; }
+            .shake { animation: shake 0.5s ease; }
+            .bounce { animation: bounce 0.5s ease infinite; }
+            .spin { animation: spin 1s linear; }
+            .color-change { animation: colorChange 2s linear infinite; }
+            
+            /* Анимации для игры */
+            .letter-found { 
+                animation: pulse 0.3s ease, fadeIn 0.3s ease;
+            }
+            
+            .word-complete {
+                animation: pulse 0.5s ease, colorChange 1s ease;
+            }
+            
+            .level-up-star {
+                animation: bounce 0.5s ease infinite alternate;
             }
         `;
         document.head.appendChild(style);
     }
+    
+    // ====================
+    // ИГРОВЫЕ АНИМАЦИИ
+    // ====================
+    
+    // 1. Анимация добавления буквы
+    addLetter(letterElement) {
+        if (!letterElement) return;
+        
+        letterElement.classList.add('pulse');
+        setTimeout(() => {
+            letterElement.classList.remove('pulse');
+        }, 500);
+    }
+    
+    // 2. Анимация удаления буквы
+    removeLetter(inputArea) {
+        if (!inputArea) return;
+        
+        inputArea.classList.add('shake');
+        setTimeout(() => {
+            inputArea.classList.remove('shake');
+        }, 500);
+    }
+    
+    // 3. Анимация сброса ввода
+    resetInput(inputLetters) {
+        if (!inputLetters || inputLetters.length === 0) return;
+        
+        inputLetters.forEach(letter => {
+            letter.style.transition = 'all 0.3s ease';
+            letter.style.opacity = '0';
+            letter.style.transform = 'scale(0) translateY(20px)';
+        });
+    }
+    
+    // 4. Анимация найденного слова
+    wordFound(wordText, cells) {
+        if (!cells || cells.length === 0) return;
+        
+        // Анимация каждой буквы слова
+        cells.forEach((cell, index) => {
+            setTimeout(() => {
+                cell.classList.add('letter-found');
+                
+                // Эффект вспышки
+                this.createFlash(cell, 'rgba(34, 197, 94, 0.3)');
+                
+                // Убираем класс через время
+                setTimeout(() => {
+                    cell.classList.remove('letter-found');
+                }, 1000);
+            }, index * 100);
+        });
+    }
+    
+    // 5. Анимация неправильного слова
+    wrongWord(inputArea, circleLetters) {
+        // Тряска поля ввода
+        if (inputArea) {
+            inputArea.classList.add('shake');
+            setTimeout(() => inputArea.classList.remove('shake'), 500);
+        }
+        
+        // Красная вспышка на буквах
+        if (circleLetters) {
+            circleLetters.forEach(letter => {
+                this.createFlash(letter, 'rgba(239, 68, 68, 0.3)', 300);
+                letter.classList.add('shake');
+                setTimeout(() => letter.classList.remove('shake'), 500);
+            });
+        }
+    }
+    
+    // 6. Анимация очков
+    showPoints(points, scoreElement) {
+        if (!scoreElement) return;
+        
+        const pointsElement = document.createElement('div');
+        pointsElement.className = 'points-animation';
+        pointsElement.textContent = `+${points}`;
+        pointsElement.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #10b981;
+            font-size: 1.5rem;
+            font-weight: bold;
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 1;
+        `;
+        
+        scoreElement.appendChild(pointsElement);
+        
+        // Анимация всплывания
+        let opacity = 1;
+        let y = 0;
+        
+        const animate = () => {
+            opacity -= 0.02;
+            y -= 2;
+            
+            pointsElement.style.opacity = opacity;
+            pointsElement.style.transform = `translate(-50%, calc(-50% + ${y}px))`;
+            
+            if (opacity > 0) {
+                requestAnimationFrame(animate);
+            } else {
+                pointsElement.remove();
+            }
+        };
+        
+        requestAnimationFrame(animate);
+    }
+    
+    // 7. Анимация завершения уровня
+    levelComplete() {
+        // Создаем эффект завершения уровня
+        const effect = document.createElement('div');
+        effect.className = 'level-complete-effect';
+        effect.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(34,197,94,0.1) 0%, transparent 70%);
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        `;
+        
+        document.body.appendChild(effect);
+        
+        // Звезды
+        for (let i = 0; i < 5; i++) {
+            setTimeout(() => this.createStar(effect), i * 200);
+        }
+        
+        // Удаляем через 2 секунды
+        setTimeout(() => {
+            effect.style.opacity = '0';
+            effect.style.transition = 'opacity 0.5s';
+            setTimeout(() => effect.remove(), 500);
+        }, 2000);
+    }
+    
+    // 8. Анимация проигрыша
+    levelFailed(gameScreen) {
+        if (!gameScreen) return;
+        
+        // Красная вспышка
+        this.createFlash(gameScreen, 'rgba(239, 68, 68, 0.2)', 500);
+        
+        // Тряска экрана
+        gameScreen.classList.add('shake');
+        setTimeout(() => gameScreen.classList.remove('shake'), 500);
+    }
+    
+    // 9. Анимация для букв в круге при наведении
+    circleLetterHover(letterElement) {
+        if (!letterElement) return;
+        
+        letterElement.classList.add('pulse');
+        letterElement.style.transform = 'scale(1.1)';
+        letterElement.style.zIndex = '10';
+        
+        setTimeout(() => {
+            letterElement.classList.remove('pulse');
+        }, 300);
+    }
+    
+    // 10. Анимация для кнопок
+    buttonClick(button) {
+        if (!button) return;
+        
+        button.classList.add('pulse');
+        button.style.transform = 'scale(0.95)';
+        
+        setTimeout(() => {
+            button.classList.remove('pulse');
+            button.style.transform = '';
+        }, 200);
+    }
+    
+    // ====================
+    // ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ
+    // ====================
+    
+    // Создание вспышки
+    createFlash(element, color, duration = 200) {
+        if (!element) return;
+        
+        const flash = document.createElement('div');
+        flash.style.cssText = `
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: ${color};
+            border-radius: inherit;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.5;
+        `;
+        
+        element.appendChild(flash);
+        
+        // Исчезновение
+        let opacity = 0.5;
+        const fade = () => {
+            opacity -= 0.05;
+            flash.style.opacity = opacity;
+            
+            if (opacity > 0) {
+                requestAnimationFrame(fade);
+            } else {
+                flash.remove();
+            }
+        };
+        
+        requestAnimationFrame(fade);
+    }
+    
+    // Создание звезды
+    createStar(container) {
+        const star = document.createElement('div');
+        star.className = 'level-up-star';
+        star.innerHTML = '⭐';
+        star.style.cssText = `
+            position: absolute;
+            font-size: 2rem;
+            top: ${Math.random() * 100}%;
+            left: ${Math.random() * 100}%;
+            opacity: 0;
+            animation: 
+                fadeIn 0.5s ease forwards,
+                bounce 0.5s ease 0.5s infinite alternate;
+        `;
+        
+        container.appendChild(star);
+        
+        // Удаляем через время
+        setTimeout(() => {
+            star.style.opacity = '0';
+            star.style.transition = 'opacity 0.3s';
+            setTimeout(() => star.remove(), 300);
+        }, 1500);
+    }
+    
+    // Анимация прогресс-бара
+    animateProgressBar(bar, from, to) {
+        if (!bar) return;
+        
+        const duration = 500;
+        const steps = duration / 16;
+        const step = (to - from) / steps;
+        let current = from;
+        let stepCount = 0;
+        
+        const animate = () => {
+            if (stepCount < steps) {
+                current += step;
+                bar.style.width = `${current}%`;
+                stepCount++;
+                requestAnimationFrame(animate);
+            }
+        };
+        
+        animate();
+    }
+    
+    // Анимация перехода экранов
+    screenTransition(screenElement, direction = 'in') {
+        if (!screenElement) return;
+        
+        if (direction === 'in') {
+            screenElement.style.animation = 'fadeIn 0.5s ease forwards';
+        } else {
+            screenElement.style.animation = 'fadeIn 0.5s ease reverse forwards';
+        }
+    }
 }
 
-// Экспорт менеджера анимаций
-window.AnimationManager = AnimationManager;
+// Создаем глобальный экземпляр
+const Animations = new AnimationManager();
 ````
 
-**Пример инициализации объекта класса из animation.js в game.js**
+**Пример подключения animation.js в game.js**
 
 ````javascript
 class Game{
     constructor() {
         // Инициализация систем
         ...
-        this.animationManager = new AnimationManager();
+        // Инициализируем менеджер анимаций
+        this.anim = Animations; 
         ...
     }
 
-    init() {
-        ...
-        this.animationManager.initCSSAnimations();
-    }
-
-    ...
-    this.animationManager.createLevelUpEffect();
 }
 ````
+
+**Пример вызова анимаций из animation.js в game.js при добавлении буквы**
+
+````javascript
+ // Добавить букву
+    addLetter(letter) {
+        if (this.state.currentInput.length < 15) {
+            this.state.currentInput.push(letter);
+            UI.updateGameScreen(this.state);
+
+            // ВЫЗОВ АНИМАЦИИ
+            const lastInputLetter = document.querySelector('.input-letter:last-child');
+            if (lastInputLetter) {
+                this.anim.addLetter(lastInputLetter);
+            }
+
+            // Проигрываем звук
+            if (typeof GameSoundGenerator !== 'undefined') {
+                GameSoundGenerator.playClick();
+            }
+        }
+    }
+````
+
+**Аналогичные вызовы анимаций можно и в других методах добавить**
+
 
 - [ ] Шаг 12.3: Добавляем скрипт sound_generator.js и в него переместите этот код
 
@@ -1869,28 +2089,31 @@ if (typeof window !== 'undefined') {
 }
 ````
 
-**Пример инициализации в главном скрипте**
+**Пример инициализации в index.html в самом конце перед закрывающимся </body>**
 
-````javasipt
-// Эта функция проверяет доступность звукового генератора
-function initSoundSystem() {
-    // Проверяем, что GameSoundGenerator загружен
-    if (typeof GameSoundGenerator === 'undefined') {
-        console.warn('⚠️ Sound generator not loaded! Check script order in HTML');
-        return false;
-    }
-    
-    // Инициализируем звуковую систему
-    GameSoundGenerator.init();
-    
-    // Активируем после первого клика пользователя
-    document.addEventListener('click', function activateSound() {
-        GameSoundGenerator.activate();
-        document.removeEventListener('click', activateSound);
-    }, { once: true });
-    
-    return true;
-}
+````html
+<script>
+        // Инициализация игры после загрузки страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализация звуков
+            if (typeof GameSoundGenerator !== 'undefined') {
+                GameSoundGenerator.init();
+                
+                // Активируем звуки после первого клика пользователя
+                document.addEventListener('click', function activateSound() {
+                    GameSoundGenerator.activate();
+                    document.removeEventListener('click', activateSound);
+                }, { once: true });
+            }
+            
+            // Создаем игру
+            const game = new Game();
+            
+            // Сохраняем в window для глобального доступа
+            window.game = game;
+            console.log('Игра загружена. Используйте window.game для отладки');
+        });
+    </script>
 ````
 
 **Пример вызова функций в методе события**
