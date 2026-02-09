@@ -88,11 +88,11 @@
 
 ## 👥 Авторы
 
-- **Разработчик**: [@Gabryelf]
+- **Разработчик**: [@Gabryelf](https://github.com/Gabryelf)
 
 ## 🌟 Благодарности
 
-- **Помощь в проекте**: [@HoMaX] [@stupiqplonde]
+- **Помощь в проекте**: [@HoMaX](https://github.com/nictomist1-arch) & [@stupiqplonde](https://github.com/stupiqplonde)
 
 ## 📄 Материалы
 
