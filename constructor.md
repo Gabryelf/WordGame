@@ -27,6 +27,9 @@ word-wonders/
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Word Wonders</title>
 </head>
+````
+**Добавляем в ui.js в метод updateGameScreen()**
+````javascript
 <body>
     <!-- Главное меню -->
     <div id="mainScreen" class="screen active">
