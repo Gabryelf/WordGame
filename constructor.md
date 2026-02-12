@@ -536,7 +536,11 @@ const UI = {
         // Присваиваем класс стилей для отображения
         document.getElementById(screenId).classList.add('active');
     },
+````
 
+**Добавляем в скрипт ui.js в метод updateGameScreen()**
+
+````javascript
  if (!state.levelData) return;
         
         // Обновить статистику
