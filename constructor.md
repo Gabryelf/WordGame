@@ -841,7 +841,7 @@ https://fonts.google.com/
 
 **Организуем систему данных - уровень и сложность**
 
-````javascpt
+````javascript
 // Генерация обычного уровня
     generateLevel() {
         const levelMultiplier = 1 + (this.state.level - 1) * CONFIG.LEVEL_MULTIPLIER;
@@ -856,7 +856,7 @@ https://fonts.google.com/
 
 **Подбираем слова из конфига в соответствии со сложностью**
 
-````javascpt
+````javascript
 // Генерация обычного уровня
     generateLevel() {
 
