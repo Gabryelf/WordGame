@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Heroes of the Dungeon — Roguelike 3x3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,700;14..32,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/game.css">
+    <link rel="stylesheet" href="styles/ui.css">
+    <link rel="stylesheet" href="styles/theme.css">
+</head>
+<body>
+    <div id="app">
+        <!-- МЕНЮ -->
+        <div id="menu-screen" class="screen active">
+            <div class="menu-container">
+                <h1 class="game-title">⚔️ HEROES OF THE DUNGEON ⚔️</h1>
+                <div class="hero-selection">
+                    <h2>Choose your champion</h2>
+                    <div class="hero-cards">
+                        <div class="hero-card" data-hero="warrior">
+                            <div class="hero-icon">⚔️</div>
+                            <h3>Warrior</h3>
+                            <p>❤️ 30 HP &nbsp;|&nbsp; ⚔️ 8 ATK</p>
+                            <p class="hero-desc">Sturdy fighter</p>
+                        </div>
+                        <div class="hero-card" data-hero="rogue">
+                            <div class="hero-icon">🗡️</div>
+                            <h3>Rogue</h3>
+                            <p>❤️ 22 HP &nbsp;|&nbsp; ⚔️ 10 ATK</p>
+                            <p class="hero-desc">25% critical</p>
+                        </div>
+                        <div class="hero-card" data-hero="mage">
+                            <div class="hero-icon">🔮</div>
+                            <h3>Mage</h3>
+                            <p>❤️ 18 HP &nbsp;|&nbsp; ⚔️ 12 ATK</p>
+                            <p class="hero-desc">20% magic surge</p>
+                        </div>
+                    </div>
+                </div>
+                <button id="start-game-btn" class="btn btn-primary" disabled>Enter the Dungeon</button>
+            </div>
+        </div>
+
+        <!-- ИГРОВОЙ ЭКРАН -->
+        <div id="game-screen" class="screen">
+            <div class="game-container">
+                <!-- Верхняя панель с героем -->
+                <div class="game-header">
+                    <div class="hero-badge"><span id="hero-icon-header">⚔️</span> <span id="hero-name-header">Warrior</span></div>
+                    <div class="hero-stats-compact">
+                        <div>❤️ <span id="hp-text">30</span>/<span id="hp-max">30</span></div>
+                        <div>⚔️ <span id="atk-value">8</span></div>
+                        <div>🏆 <span id="score-value">0</span></div>
+                        <div>🗝️ Floor <span id="floor-num">1</span></div>
+                    </div>
+                    <div><button id="reset-game-btn" class="btn-small">🔄 New Game</button>
+                    <button id="menu-btn" class="btn-small">🏠 Menu</button></div>
+                </div>
+
+                <!-- Сетка 3x3 (все тайлы видны) -->
+                <div class="game-grid" id="game-grid"></div>
+                
+                <!-- Всплывающие сообщения -->
+                <div id="toast-message" class="toast"></div>
+            </div>
+        </div>
+
+        <!-- GAME OVER -->
+        <div id="gameover-screen" class="screen">
+            <div class="menu-container">
+                <h1 class="game-title">💀 GAME OVER 💀</h1>
+                <div class="gameover-stats">
+                    <p>🏰 Floor: <span id="final-floor">1</span></p>
+                    <p>🏆 Score: <span id="final-score">0</span></p>
+                    <p>👾 Kills: <span id="enemies-killed">0</span></p>
+                </div>
+                <button id="play-again-btn" class="btn btn-primary">Try Again</button>
+                <button id="gameover-menu-btn" class="btn btn-secondary">Main Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config/gameConfig.js"></script>
+
+    <!--  утилиты -->
+    <script src="js/utils.js"></script>
+
+    <!--  сущности -->
+    <script src="js/entities/Tile.js"></script>
+    <script src="js/entities/Enemy.js"></script>
+    <script src="js/entities/Hero.js"></script>
+
+    <!--  менеджеры  -->
+    <script src="js/managers/EffectManager.js"></script>
+    <script src="js/managers/CombatManager.js"></script>
+    <script src="js/managers/GridManager.js"></script>
+    <script src="js/managers/GameManager.js"></script>
+
+    <!--  main -->
+    <script src="js/main.js"></script>
+</body>
+</html>

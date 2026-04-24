@@ -1,0 +1,60 @@
+.menu-container {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 1.5rem;
+    border-radius: 2rem;
+    backdrop-filter: blur(12px);
+}
+
+.game-title {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #ffd966, #ffb347);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: none;
+}
+
+.hero-selection h2 {
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.hero-cards {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+}
+
+.hero-card {
+    background: linear-gradient(135deg, #2c3e50, #1a1a2e);
+    padding: 1rem;
+    border-radius: 1.2rem;
+    cursor: pointer;
+    transition: 0.2s;
+    min-width: 120px;
+    border: 2px solid transparent;
+}
+
+.hero-card.selected {
+    border-color: #ffd700;
+    background: #3a5068;
+}
+
+.hero-icon {
+    font-size: 3rem;
+}
+
+.hero-card h3 {
+    margin: 0.5rem 0;
+}
+
+.gameover-stats {
+    margin: 1.5rem 0;
+    background: #00000066;
+    padding: 1rem;
+    border-radius: 1rem;
+}
